@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Julians projects</title>
+<style>
+  :root{
+    --bg: #f2f2f7;
+    --panel: #ffffff;
+    --panel-border: rgba(0,0,0,0.06);
+    --text: #1c1c1e;
+    --text-secondary: #6e6e73;
+    --divider: rgba(60,60,67,0.14);
+    --row-hover: rgba(0,0,0,0.035);
+    --row-active: rgba(0,0,0,0.06);
+    --submenu-bg: rgba(0,0,0,0.02);
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.05);
+    --focus-ring: #0071e3;
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg: #000000;
+      --panel: #1c1c1e;
+      --panel-border: rgba(255,255,255,0.08);
+      --text: #f5f5f7;
+      --text-secondary: #98989d;
+      --divider: rgba(84,84,88,0.55);
+      --row-hover: rgba(255,255,255,0.06);
+      --row-active: rgba(255,255,255,0.1);
+      --submenu-bg: rgba(255,255,255,0.035);
+      --shadow: 0 1px 3px rgba(0,0,0,0.4), 0 8px 24px rgba(0,0,0,0.35);
+      --focus-ring: #409cff;
+    }
+  }
+
+  *{ box-sizing: border-box; }
+
+  html, body{
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  main{
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 72px 20px 100px;
+    animation: rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes rise{
+    from{ opacity: 0; transform: translateY(10px); }
+    to{ opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    main{ animation: none; }
+    .submenu, .chevron, .row-title svg{ transition: none !important; }
+  }
+
+  header{
+    margin-bottom: 40px;
+  }
+
+  .eyebrow{
+    font-size: 15px;
+    font-weight: 590;
+    color: var(--text-secondary);
+    margin: 0 0 4px;
+  }
+
+  h1{
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 10px;
+  }
+
+  .lede{
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    margin: 0;
+    max-width: 52ch;
+  }
+
+  .section{
+    margin-bottom: 34px;
+  }
+
+  .section-title{
+    font-size: 13px;
+    font-weight: 590;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--text-secondary);
+    margin: 0 0 8px;
+    padding: 0 16px;
+  }
+
+  .panel{
+    background: var(--panel);
+    border-radius: 14px;
+    border: 1px solid var(--panel-border);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  /* Shared row look for plain links (About panel) */
+  a.row{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    min-height: 52px;
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 1px solid var(--divider);
+    transition: background-color 0.12s ease;
+  }
+
+  .panel > a.row:last-child{
+    border-bottom: none;
+  }
+
+  a.row:hover{
+    background: var(--row-hover);
+  }
+
+  a.row:active{
+    background: var(--row-active);
+  }
+
+  a.row:focus-visible{
+    outline: 2px solid var(--focus-ring);
+    outline-offset: -2px;
+    background: var(--row-hover);
+  }
+
+  .icon{
+    flex: 0 0 30px;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .icon svg{
+    width: 17px;
+    height: 17px;
+    stroke: #fff;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .row-text{
+    flex: 1;
+    min-width: 0;
+  }
+
+  .row-title{
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.3;
+  }
+
+  .row-subtitle{
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.3;
+    margin-top: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .chevron{
+    flex: 0 0 auto;
+    color: var(--text-secondary);
+    opacity: 0.55;
+  }
+
+  .chevron svg{
+    width: 13px;
+    height: 13px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Expandable project rows */
+  .project{
+    border-bottom: 1px solid var(--divider);
+  }
+
+  .panel > .project:last-child{
+    border-bottom: none;
+  }
+
+  .project-trigger{
+    all: unset;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    min-height: 52px;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.12s ease;
+  }
+
+  .project-trigger:hover{
+    background: var(--row-hover);
+  }
+
+  .project-trigger:active{
+    background: var(--row-active);
+  }
+
+  .project-trigger:focus-visible{
+    outline: 2px solid var(--focus-ring);
+    outline-offset: -2px;
+    background: var(--row-hover);
+  }
+
+  .project-trigger .chevron svg{
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: rotate(90deg);
+  }
+
+  .project-trigger[aria-expanded="true"] .chevron svg{
+    transform: rotate(-90deg);
+  }
+
+  .submenu{
+    display: grid;
+    grid-template-rows: 0fr;
+    background: var(--submenu-bg);
+    transition: grid-template-rows 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .project.open .submenu{
+    grid-template-rows: 1fr;
+  }
+
+  .submenu-inner{
+    overflow: hidden;
+  }
+
+  .submenu a.row{
+    padding-left: 16px;
+    min-height: 46px;
+    border-bottom: 1px solid var(--divider);
+  }
+
+  .submenu a.row:last-child{
+    border-bottom: none;
+  }
+
+  .submenu .icon{
+    flex: 0 0 26px;
+    width: 26px;
+    height: 26px;
+    background: transparent !important;
+  }
+
+  .submenu .icon svg{
+    width: 15px;
+    height: 15px;
+    stroke: var(--text-secondary);
+  }
+
+  .submenu .row-title{
+    font-size: 15px;
+    color: var(--text-secondary);
+  }
+
+  footer{
+    margin-top: 48px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  footer a{
+    color: inherit;
+  }
+</style>
+</head>
+<body>
+
+<main>
+
+  <header>
+    <p class="eyebrow"></p>
+    <h1>Julian Rubilar</h1>
+    <p class="lede">Navigator page to view projects and their source code</p>
+  </header>
+
+  <div class="section">
+    <p class="section-title">Projects</p>
+    <div class="panel">
+
+      <div class="project">
+        <button class="project-trigger" type="button" aria-expanded="false" aria-controls="submenu-two-time-pad">
+          <span class="icon" style="background:#007AFF;">
+            <svg viewBox="0 0 24 24"><path d="M4 6a2 2 0 0 1 2-2h4l2 3h6a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/></svg>
+          </span>
+          <span class="row-text">
+            <div class="row-title">Two-time pad</div>
+            <div class="row-subtitle">CTF task regarding one-time pad</div>
+          </span>
+          <span class="chevron"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+        </button>
+        <div class="submenu" id="submenu-two-time-pad">
+          <div class="submenu-inner">
+            <a class="row" href="Two_time_pad/two-time-pad-ctf.html">
+              <span class="icon">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+              </span>
+              <span class="row-text">
+                <div class="row-title">View example</div>
+              </span>
+            </a>
+            <a class="row" href="https://github.com/jarubis/ctf/blob/main/Two_time_pad/two-time-pad-ctf.html">
+              <span class="icon">
+                <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              </span>
+              <span class="row-text">
+                <div class="row-title">View source code</div>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project">
+        <button class="project-trigger" type="button" aria-expanded="false" aria-controls="submenu-apex">
+          <span class="icon" style="background:#FF6B35">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09"/>
+              <path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z"/>
+              <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05"/></svg>
+          </span>
+          <span class="row-text">
+            <div class="row-title">Apex</div>
+            <div class="row-subtitle">IN2000 group project that won best app prize by the Norwegian Meteorological Institute</div>
+          </span>
+          <span class="chevron"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+        </button>
+        <div class="submenu" id="submenu-apex">
+          <div class="submenu-inner">
+            <a class="row" href="https://in2000.met.no/2024/vinnere.html">
+              <span class="icon">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+              </span>
+              <span class="row-text">
+                <div class="row-title">View example</div>
+              </span>
+            </a>
+            <a class="row" href="https://github.com/haakonRefsvik/apex">
+              <span class="icon">
+                <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              </span>
+              <span class="row-text">
+                <div class="row-title">View source code</div>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">About</p>
+    <div class="panel">
+
+      <a class="row" href="about/">
+        <span class="icon" style="background:#AF52DE;">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>
+        </span>
+        <span class="row-text">
+          <div class="row-title">About Me</div>
+          <div class="row-subtitle">Background and contact</div>
+        </span>
+        <span class="chevron"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+      </a>
+
+      <a class="row" href="https://github.com/jarubis">
+        <span class="icon" style="background:#1c1c1e;">
+          <svg viewBox="0 0 24 24"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+        </span>
+        <span class="row-text">
+          <div class="row-title">GitHub</div>
+          <div class="row-subtitle">github.com/jarubis</div>
+        </span>
+        <span class="chevron"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+      </a>
+
+    </div>
+  </div>
+
+  <footer>
+    <p>Made by Julian</p>
+  </footer>
+
+</main>
+
+<script>
+  document.querySelectorAll('.project-trigger').forEach(function(trigger){
+    trigger.addEventListener('click', function(){
+      var project = trigger.closest('.project');
+      var isOpen = project.classList.contains('open');
+
+      // Close any other open project (accordion behaviour)
+      document.querySelectorAll('.project.open').forEach(function(openProject){
+        if(openProject !== project){
+          openProject.classList.remove('open');
+          openProject.querySelector('.project-trigger').setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      project.classList.toggle('open', !isOpen);
+      trigger.setAttribute('aria-expanded', String(!isOpen));
+    });
+  });
+</script>
+
+</body>
+</html>
